@@ -1,5 +1,10 @@
+
+
+
+
+
 def crust()
-	["Thick", "Thin", "Pan", "Stuffed"]
+	["Thick Crust", "Thin Crust", "Pan Crust", "Stuffed Crust"]
 end
 
 def meats()
@@ -11,7 +16,7 @@ def veggies()
 end
 
 def special_sauce()
-	["Tomato", "Ranch", "Itallian", "Fruit"]
+	["Tomato Sauce", "Ranch Sauce", "Itallian Sauce", "Fruit Sauce"]
 end
 
 def special_tops()
@@ -19,12 +24,42 @@ def special_tops()
 end
 
 def size()
-	sizes = ["Small", "Medium", "Large", "Extra Large"]
+	["Small", "Medium", "Large", "Extra Large"]
+end
+
+def owe_calc(pizza_size)
+	owe_count = 0
+
+	pizza_size.each do |x|
+		if x == "Small"
+			p = 8
+		elsif x == "Medium"
+			p = 10
+		elsif x == "Large"
+			p =12
+		else
+			p = 15
+		end
+		owe_count = owe_count + p
+	end
+	return owe_count
 end
 
 puts "How many pizzas would you like"
 	num_p = gets.chomp
 	num_p = num_p.to_i
+
+# for x in 1..num_p
+# 	p_size = size.sample
+
+# 	puts "Pizza #{x}"
+# 	puts "#{p_size}, #{crust.sample}, #{meats.sample}, #{veggies.sample}, #{special_sauce.sample}, #{special_tops.sample}\n"
+# 	puts "  "
+
+# 	owe = owe + owe_calc(p_size)
+	
+# end
+
 
 pizza_size = []
 crust_type = []
@@ -65,36 +100,31 @@ for p in 1..num_p
 	puts " "
 end
 
-for c in 1..num_p
-	puts "Pizza #{c}" 
-	puts pizza_size[c-1]
-	puts crust_type[c-1]
-	puts meat_selection[c-1]
-	puts veggies_selection[c-1]
-	puts sauce_selection[c-1]
-	puts " "
+def show_pizzas(num_p, pizza_size, crust_type, meat_selection, veggies_selection, sauce_selection)
+	for c in 1..num_p
+		puts "Pizza #{c}" 
+		puts pizza_size[c-1]
+		puts crust_type[c-1]
+		puts meat_selection[c-1]
+		puts veggies_selection[c-1]
+		puts sauce_selection[c-1]
+		puts " "
+	end
 end
 
+show_pizzas(num_p, pizza_size, crust_type, meat_selection, veggies_selection, sauce_selection)
 
 
-# owe = 0
-# owe.to_f
+owe = owe_calc(pizza_size)
+owe = owe.to_f
+delivery = num_p * 2
+delivery = delivery.to_f
+tax = (owe + delivery) * 0.06
+tax = tax.to_f
 
-# for x in 1..num_p
-# 	puts "Pizza #{x}"
-# 	print "#{size}, #{crust}, #{meats}, #{veggies}, #{special_sauce}, #{special_tops}\n"
-# 	if $pizza_size == "Small"
-# 		owe = owe + 8
-# 	elsif $pizza_size == "Medium"
-# 		owe = owe + 10
-# 	elsif $pizza_size == "Large"
-# 		owe = owe + 12
-# 	else
-# 		owe = owe + 15
-# 	end
-# 	puts "\n"
-# end
 
-# delivery = num_p * 2
-
-# puts "You owe $#{(owe + delivery).round(2)}"
+puts "Pizza Charge = $#{sprintf("%.02f", owe)}"
+puts "Delivery = $#{sprintf("%.02f", delivery)}"
+puts "Tax = $#{sprintf("%.02f", tax)}"
+puts " "
+puts "Your Total is $#{(sprintf("%.02f",(owe + delivery + tax)))}"

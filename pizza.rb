@@ -52,13 +52,14 @@ end
 
 delivery = num_p * 2
 delivery = delivery.to_f
-tax = tax.to_f
 tax = owe * 0.06
+tax = tax.to_f
 owe = owe.to_f
 
-puts "Pizza Charge = $#{owe.round(2)}"
-puts "Delivery = $#{(delivery).round(2)}"
-puts "Tax = $#{tax.round(2)}"
+puts 
+puts "Pizza Charge = $#{sprintf("%.02f", owe)}"
+puts "Delivery = $#{sprintf("%.02f", delivery)}"
+puts "Tax = $#{sprintf("%.02f", tax)}"
 puts " "
-puts "Your Total is $#{(owe + delivery + tax).round(2)}"
+puts "Your Total is $#{(sprintf("%.02f",(owe + delivery + tax)))}"
 
