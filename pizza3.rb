@@ -10,7 +10,16 @@ def database
 	piz_sizes: [["Small", "Medium", "Large", "Extra Large"]],
 	sub_breads: [["White", "Whole Wheat", "Itallian", "Herb"]],
 	sub_sizes: [["6 Inch", "Foot Long", "Good Grief"]],
-	desserts: [["Chocolate Cake", 2.00], ["Pudding", 1.50], ["Chocolate Chip Cookie", 1.00]]}
+	desserts: [["Chocolate Cake", 2], ["Pudding", 1.5], ["Chocolate Chip Cookie", 1]]}
+end
+
+
+def show_order(order)
+	for x in (1..order.length)
+			print "#{order[x][0]} - $"
+			print "#{order[x][1]}"
+			print "\n"
+		end
 end
 
 
@@ -19,7 +28,7 @@ def add_item(order)
 	if order.empty?
 	else
 		puts "Your order so far is"
-		puts order
+		show_order(order)
 	end
 	continue = "nil"
 	until continue == "yes" || continue == "no"
@@ -27,11 +36,6 @@ def add_item(order)
 		continue = gets.chomp 
 	end
 	return continue
-
-	# while continue == "yes"
-	# 	#calls main function
-	# 	main(database)
-	# end
 end
 
 
@@ -58,25 +62,18 @@ def main()
 		
 	end	
 	return answer
-
-	# if answer == 1
-	# 	pizza_ordering(database, owe)
-	# elsif answer == 5
-	# 	dessert_order(database, owe)
-	# end
 end
 
 
-def dessert_order(order, database, owe, item_count)
+def dessert_order(order, database, item_count)
 
-	#database[:desserts][0][1]
-
-	#puts "TEST #{database}"
 	system "clear"
 	system "cls"
 	dessert_selection = 0
 	puts ""
 	puts "Select your dessert from the following:"
+
+
 	for x in (0...database[:desserts].length)
 	puts "#{x+1} - #{database[:desserts][x][0]}: $#{database[:desserts][x][1]}"
 	end
@@ -85,21 +82,32 @@ def dessert_order(order, database, owe, item_count)
 		puts "Enter the number that is next to your selection"
 		dessert_selection = gets.chomp
 		dessert_selection = dessert_selection.to_i 
-		
 	end	
-
+	item_count += 1
 	order[item_count] = database[:desserts][dessert_selection - 1]
-	owe = owe + 1 
-	return [order, owe, item_count]
+	# puts "TEST #{order}"
+
+	# #just print name of dessert
+	# puts "TEST2 #{order[1]}"
+	
+	return [order, item_count]
 end
 
+
+def calculate_owe(order, owe)
+
+for x in (1...(order.length + 1))
+	owe = owe + order[x][1]
+end
+	return owe 
+end
 
 
 
 order = Hash.new
 item_count = 0
 owe = 0
-owe = owe.to_f
+#owe = owe.to_f
 system "clear"
 system "cls"
 puts "Welcome to Gooden's Pizza Shack"
@@ -107,21 +115,23 @@ puts "Welcome to Gooden's Pizza Shack"
 continue = add_item(order)
 
 while continue == "yes"
-	item_count += 1
+
 	category = main()
 	if category == 5
-		order, owe, item_count = dessert_order(order, database, owe, item_count)
+		order, item_count = dessert_order(order, database, item_count)
 	end
 	continue = add_item(order)
 end
 
-pp order
-puts ["order"].length
 # for x in (0...[order].length)
 # 	puts "#{x+1} - #{:order[x]}"
 # 	end
-
-puts owe
+owe = calculate_owe(order, owe)
+puts "Your final order is"
+puts ""
+show_order(order)
+puts ""
+puts "You owe #{owe}"
 puts "Have a nice day!"
 
 
