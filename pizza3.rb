@@ -1,48 +1,46 @@
 
 def database
-	database = {
-	"piz_crusts" => ["Thick", "Thin", "Pan", "Stuffed"],
-	"piz_meats" => ["Pepperoni", "Sausage", "Ham", "Chicken"],
-	"piz_veggies" => ["Peppers", "Onions", "Mushrooms", "Peas"],
-	"piz_sauces" => ["Tomato", "Ranch", "Itallian", "Spicy"],
-	"piz_special_tops" => ["Anchovies", "Pineapple"],
-	"piz_sizes" => ["Small", "Medium", "Large", "Extra Large"],
-	"sub_breads" => ["White", "Whole Wheat", "Itallian", "Herb"],
-	"sub_sizes" => ["6 Inch", "Foot Long", "Good Grief"],
-	"desserts" => ["Chocolate Cake", "Pudding", "Chocolate Chip Cookie"]
-	}
+	database = 
+	{
+	piz_crusts: [["Thick", "Thin", "Pan", "Stuffed"]],
+	piz_meat: [["Pepperoni", "Sausage", "Ham", "Chicken"]],
+	piz_veggies: [["Peppers", "Onions", "Mushrooms", "Peas"]],
+	piz_sauces: [["Tomato", "Ranch", "Itallian", "Spicy"]],
+	piz_special_tops: [["Anchovies", "Pineapple"]],
+	piz_sizes: [["Small", "Medium", "Large", "Extra Large"]],
+	sub_breads: [["White", "Whole Wheat", "Itallian", "Herb"]],
+	sub_sizes: [["6 Inch", "Foot Long", "Good Grief"]],
+	desserts: [["Chocolate Cake", 2.00], ["Pudding", 1.50], ["Chocolate Chip Cookie", 1.00]]}
 end
 
 
-def dessert_order(database, owe)
+def add_item(order)
+	puts ""
+	if order.empty?
+	else
+		puts "Your order so far is"
+		puts order
+	end
+	continue = "nil"
+	until continue == "yes" || continue == "no"
+		puts "Would you like to and an item to your order? (yes or no)"
+		continue = gets.chomp 
+	end
+	return continue
+
+	# while continue == "yes"
+	# 	#calls main function
+	# 	main(database)
+	# end
+end
+
+
+def main()
 	system "clear"
 	system "cls"
-	dessert_selection = 0
-	puts ""
-	puts "Select your dessert from the following:"
-	for x in (0...database["desserts"].length)
-	puts "#{x+1} - #{database["desserts"][x]}"
-	end
-
-	until dessert_selection.between?(1, database["desserts"].length)
-		puts "Enter the number that is next to your selection"
-		dessert_selection = gets.chomp
-		dessert_selection = dessert_selection.to_i 
-		
-	end	
-
-	order = {dessert_selection => database["desserts"][dessert_selection - 1]}
-	owe = owe + 1
-	return [order, owe] 
-
-	return 
-end
-
-
-def main(database, owe)
 
 	puts "What would you like to order?"
-	puts "...just type the number of your selection"
+	puts "Just type the number of your selection"
 	puts " "
 	puts "1 - Pizzas"
 	puts "2 - Subs"
@@ -54,23 +52,51 @@ def main(database, owe)
 	answer = 0
 
 	until answer.between?(1, 5)
+		puts "Enter the number that is next to your selection"
 		answer = gets.chomp
 		answer = answer.to_i 
-		puts "Enter the number that is next to your selection"
+		
 	end	
+	return answer
 
-	if answer == 1
-		order, owe = pizza_ordering(database, owe)
-	elsif answer == 5
-		order, owe = dessert_order(database, owe)
+	# if answer == 1
+	# 	pizza_ordering(database, owe)
+	# elsif answer == 5
+	# 	dessert_order(database, owe)
+	# end
+end
+
+
+def dessert_order(order, database, owe, item_count)
+
+	#database[:desserts][0][1]
+
+	#puts "TEST #{database}"
+	system "clear"
+	system "cls"
+	dessert_selection = 0
+	puts ""
+	puts "Select your dessert from the following:"
+	for x in (0...database[:desserts].length)
+	puts "#{x+1} - #{database[:desserts][x][0]}: $#{database[:desserts][x][1]}"
 	end
 
-	return [order, owe]
+	until dessert_selection.between?(1, database[:desserts].length)
+		puts "Enter the number that is next to your selection"
+		dessert_selection = gets.chomp
+		dessert_selection = dessert_selection.to_i 
+		
+	end	
+
+	order[item_count] = database[:desserts][dessert_selection - 1]
+	owe = owe + 1 
+	return [order, owe, item_count]
 end
 
 
 
-order = {}
+
+order = Hash.new
 item_count = 0
 owe = 0
 owe = owe.to_f
@@ -78,21 +104,28 @@ system "clear"
 system "cls"
 puts "Welcome to Gooden's Pizza Shack"
 
-continue = "nil"
+continue = add_item(order)
 
-	until continue == "yes" || continue == "no"
-		puts "Would you like to and an item to your order?"
-		continue = gets.chomp 
+while continue == "yes"
+	item_count += 1
+	category = main()
+	if category == 5
+		order, owe, item_count = dessert_order(order, database, owe, item_count)
 	end
+	continue = add_item(order)
+end
 
-	if continue == "yes"
-		#calls main function
-		order, owe = main(database, owe)
-	else
-		puts order
-		puts owe
-		puts "Have a nice day!"
-	end
+pp order
+puts ["order"].length
+# for x in (0...[order].length)
+# 	puts "#{x+1} - #{:order[x]}"
+# 	end
+
+puts owe
+puts "Have a nice day!"
+
+
+
 
 
 
@@ -137,61 +170,61 @@ continue = "nil"
 # for p in 1..num_p
 
 #Select the size of each pizza
-def pizza_ordering()
-	size_sel = 0
-	until size.include? size_sel do 
-		puts "Pick the size for Pizza #{p} from the following sizes"
-		puts size
-		size_sel = gets.chomp
-		puts " "
-	end	
-		pizza_size.push (size_sel)
-		puts " "
+# def pizza_ordering()
+# 	size_sel = 0
+# 	until size.include? size_sel do 
+# 		puts "Pick the size for Pizza #{p} from the following sizes"
+# 		puts size
+# 		size_sel = gets.chomp
+# 		puts " "
+# 	end	
+# 		pizza_size.push (size_sel)
+# 		puts " "
 
-#Select the crust for each pizza
-	crust_sel = 0
-	until crust.include? crust_sel do 
-		puts "Pick the crust for Pizza #{p} from the following types"
-		puts crust
-		crust_sel = gets.chomp
-		puts " "
-	end	
-		crust_type.push (crust_sel)
-		puts " "
+# #Select the crust for each pizza
+# 	crust_sel = 0
+# 	until crust.include? crust_sel do 
+# 		puts "Pick the crust for Pizza #{p} from the following types"
+# 		puts crust
+# 		crust_sel = gets.chomp
+# 		puts " "
+# 	end	
+# 		crust_type.push (crust_sel)
+# 		puts " "
 
-#Select the meat for each pizza
-	meats_sel = 0
-	until meats.include? meats_sel do 
-		puts "Pick the meat for Pizza #{p} from the following types"
-		puts meats
-		meats_sel = gets.chomp
-		puts " "
-	end	
-		meat_selection.push (meats_sel)
-		puts " "
+# #Select the meat for each pizza
+# 	meats_sel = 0
+# 	until meats.include? meats_sel do 
+# 		puts "Pick the meat for Pizza #{p} from the following types"
+# 		puts meats
+# 		meats_sel = gets.chomp
+# 		puts " "
+# 	end	
+# 		meat_selection.push (meats_sel)
+# 		puts " "
 
-#Select the veggies for each pizza
-	veggie_sel = 0
-	until veggies.include? veggie_sel do 
-		puts "Pick the veggie for Pizza #{p} from the following types"
-		puts veggies
-		veggie_sel = gets.chomp
-		puts " "
-	end	
-		veggies_selection.push (veggie_sel)
-		puts " "
+# #Select the veggies for each pizza
+# 	veggie_sel = 0
+# 	until veggies.include? veggie_sel do 
+# 		puts "Pick the veggie for Pizza #{p} from the following types"
+# 		puts veggies
+# 		veggie_sel = gets.chomp
+# 		puts " "
+# 	end	
+# 		veggies_selection.push (veggie_sel)
+# 		puts " "
 
-#Select the sauce for each pizza
-	sauce_sel = 0
-	until special_sauce.include? sauce_sel do 
-		puts "Pick the sauce for Pizza #{p} from the following types"
-		puts special_sauce
-		sauce_sel = gets.chomp
-		puts " "
-	end	
-		sauce_selection.push (sauce_sel)
-		puts " "
-end
+# #Select the sauce for each pizza
+# 	sauce_sel = 0
+# 	until special_sauce.include? sauce_sel do 
+# 		puts "Pick the sauce for Pizza #{p} from the following types"
+# 		puts special_sauce
+# 		sauce_sel = gets.chomp
+# 		puts " "
+# 	end	
+# 		sauce_selection.push (sauce_sel)
+# 		puts " "
+# end
 
 # def show_pizzas(num_p, pizza_size, crust_type, meat_selection, veggies_selection, sauce_selection)
 # 	for c in 1..num_p
