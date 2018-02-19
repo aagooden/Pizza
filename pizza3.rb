@@ -2,23 +2,27 @@
 def database
 	database = 
 	{
-	order_items: [["pizza"], ["sub"], ["side"], ["drink"], ["dessert"]],
-	piz_crusts: [["Thick", "Thin", "Pan", "Stuffed"]],
-	piz_meat: [["Pepperoni", "Sausage", "Ham", "Chicken"]],
-	piz_veggies: [["Peppers", "Onions", "Mushrooms", "Peas"]],
-	piz_sauces: [["Tomato", "Ranch", "Itallian", "Spicy"]],
-	piz_special_tops: [["Anchovies", "Pineapple"]],
-	piz_sizes: [["Small", "Medium", "Large", "Extra Large"]],
-	sub_breads: [["White", "Whole Wheat", "Itallian", "Herb"]],
-	sub_sizes: [["6 Inch", "Foot Long", "Good Grief"]],
-	desserts: [["Chocolate Cake", 2], ["Pudding", 1.5], ["Chocolate Chip Cookie", 1]]}
+		order_items: [["Pizza", 0], ["Sub", 0], ["Side", 0], ["Drink", 0], ["Dessert", 0]],
+		piz_crusts: [["Thick", 0], ["Thin", 0], ["Regular", 0], ["Stuffed", 2]],
+		piz_meat: [["Pepperoni", 0], ["Sausage", 0], ["Ham", 0], ["Chicken", 0]],
+		piz_veggies: [["Peppers", 0], ["Onions", 0], ["Mushrooms", 0], ["Olives", 0]],
+		piz_sauces: [["Tomato", 0], ["Alfredo", 0], ["No Sauce", 0], ["Spicy", 0]],
+		piz_special_tops: [["Anchovies", 0], ["Pineapple", 0], ["Bacon", 0]],
+		piz_sizes: [["Small", 10], ["Medium", 12], ["Large", 15], ["Extra Large", 18]],
+		sub_breads: [["White", 0], ["Whole Wheat", 0], ["Itallian", 0], ["Herb", 0]],
+		sub_sizes: [["6 Inch", 6], ["Foot Long", 10], ["Good Grief", 15]],
+		drink_sizes: [["Small", 2.5], ["Medium", 3], ["Large", 4], ["Extra Large", 6]],
+		drink_types: [["Coke", 0], ["Diet Coke", 0], ["Sprite", 0], ["Dr. Pepper", 0]],
+		side_types: [["Fries", 0], ["Onion Rings", 0], ["Potato Chips", 0]],
+		desserts: [["Chocolate Cake", 2], ["Pudding", 1.5], ["Chocolate Chip Cookie", 1]]
+	}
 end
 
 
 def show_order(order)
 	for x in (1..order.length)
-			print "#{order[x][0]} - $"
-			print "#{order[x][1]}"
+			print "#{order[x][1]} - $"
+			print "#{order[x][2]}"
 			print "\n"
 		end
 end
@@ -48,7 +52,7 @@ def main()
 	puts "Just type the number of your selection"
 	puts " "
 	for x in (0...database[:order_items].length)
-		puts "#{x+1} - #{database[:order_items][x][0].capitalize}"
+		puts "#{x+1} - #{database[:order_items][x][0]}"
 	end
 	puts ""
 
@@ -84,11 +88,10 @@ def dessert_order(order, database, item_count)
 	end	
 	item_count += 1
 	order[item_count] = database[:desserts][dessert_selection - 1]
-	# puts "TEST #{order}"
-
-	# #just print name of dessert
-	# puts "TEST2 #{order[1]}"
+	order[item_count].unshift('Dessert')
 	
+	
+
 	return [order, item_count]
 end
 
@@ -96,7 +99,7 @@ end
 def calculate_owe(order, owe)
 
 	for x in (1...(order.length + 1))
-		owe = owe + order[x][1]
+		owe = owe + order[x][2]
 	end
 	return owe 
 end
@@ -133,28 +136,9 @@ puts ""
 puts "You owe #{owe}"
 puts "Have a nice day!"
 
+puts order 
 
 
-
-
-
-# def owe_calc(pizza_size)
-# 	owe_count = 0
-
-# 	pizza_size.each do |x|
-# 		if x == "Small"
-# 			p = 8
-# 		elsif x == "Medium"
-# 			p = 10
-# 		elsif x == "Large"
-# 			p =12
-# 		else
-# 			p = 15
-# 		end
-# 		owe_count = owe_count + p
-# 	end
-# 	return owe_count
-# end
 
 
 
@@ -169,6 +153,7 @@ topping_selction = []
 
 
 def pizza_ordering()
+
 	size_sel = 0
 	until size.include? size_sel do 
 		puts "Pick the size for Pizza #{p} from the following sizes"
@@ -236,7 +221,7 @@ def show_pizzas(num_p, pizza_size, crust_type, meat_selection, veggies_selection
 	end
 end
 
-show_pizzas(num_p, pizza_size, crust_type, meat_selection, veggies_selection, sauce_selection)
+#show_pizzas(num_p, pizza_size, crust_type, meat_selection, veggies_selection, sauce_selection)
 
 
 # owe = owe_calc(pizza_size)
