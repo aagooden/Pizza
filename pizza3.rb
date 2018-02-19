@@ -2,6 +2,7 @@
 def database
 	database = 
 	{
+	order_items: [["pizza"], ["sub"], ["side"], ["drink"], ["dessert"]],
 	piz_crusts: [["Thick", "Thin", "Pan", "Stuffed"]],
 	piz_meat: [["Pepperoni", "Sausage", "Ham", "Chicken"]],
 	piz_veggies: [["Peppers", "Onions", "Mushrooms", "Peas"]],
@@ -46,11 +47,9 @@ def main()
 	puts "What would you like to order?"
 	puts "Just type the number of your selection"
 	puts " "
-	puts "1 - Pizzas"
-	puts "2 - Subs"
-	puts "3 - Sides"
-	puts "4 - Drinks"
-	puts "5 - Desserts"
+	for x in (0...database[:order_items].length)
+		puts "#{x+1} - #{database[:order_items][x][0].capitalize}"
+	end
 	puts ""
 
 	answer = 0
@@ -96,9 +95,9 @@ end
 
 def calculate_owe(order, owe)
 
-for x in (1...(order.length + 1))
-	owe = owe + order[x][1]
-end
+	for x in (1...(order.length + 1))
+		owe = owe + order[x][1]
+	end
 	return owe 
 end
 
@@ -159,96 +158,85 @@ puts "Have a nice day!"
 
 
 
+pizza_size = []
+crust_type = []
+meat_selection = []
+veggies_selection = []
+sauce_selection = []
+topping_selction = []
 
 
 
 
+def pizza_ordering()
+	size_sel = 0
+	until size.include? size_sel do 
+		puts "Pick the size for Pizza #{p} from the following sizes"
+		puts size
+		size_sel = gets.chomp
+		puts " "
+	end	
+		pizza_size.push (size_sel)
+		puts " "
 
+#Select the crust for each pizza
+	crust_sel = 0
+	until crust.include? crust_sel do 
+		puts "Pick the crust for Pizza #{p} from the following types"
+		puts crust
+		crust_sel = gets.chomp
+		puts " "
+	end	
+		crust_type.push (crust_sel)
+		puts " "
 
-# puts "How many pizzas would you like"
-# 	num_p = gets.chomp
-# 	num_p = num_p.to_i
+#Select the meat for each pizza
+	meats_sel = 0
+	until meats.include? meats_sel do 
+		puts "Pick the meat for Pizza #{p} from the following types"
+		puts meats
+		meats_sel = gets.chomp
+		puts " "
+	end	
+		meat_selection.push (meats_sel)
+		puts " "
 
+#Select the veggies for each pizza
+	veggie_sel = 0
+	until veggies.include? veggie_sel do 
+		puts "Pick the veggie for Pizza #{p} from the following types"
+		puts veggies
+		veggie_sel = gets.chomp
+		puts " "
+	end	
+		veggies_selection.push (veggie_sel)
+		puts " "
 
-# pizza_size = []
-# crust_type = []
-# meat_selection = []
-# veggies_selection = []
-# sauce_selection = []
-# topping_selction = []
+#Select the sauce for each pizza
+	sauce_sel = 0
+	until special_sauce.include? sauce_sel do 
+		puts "Pick the sauce for Pizza #{p} from the following types"
+		puts special_sauce
+		sauce_sel = gets.chomp
+		puts " "
+	end	
+		sauce_selection.push (sauce_sel)
+		puts " "
+end
 
-# for p in 1..num_p
+def show_pizzas(num_p, pizza_size, crust_type, meat_selection, veggies_selection, sauce_selection)
+	for c in 1..num_p
+		puts "Pizza #{c}" 
+		puts pizza_size[c-1]
+		puts crust_type[c-1]
+		puts meat_selection[c-1]
+		puts veggies_selection[c-1]
+		puts sauce_selection[c-1]
+		puts " "
+	end
+end
 
-#Select the size of each pizza
-# def pizza_ordering()
-# 	size_sel = 0
-# 	until size.include? size_sel do 
-# 		puts "Pick the size for Pizza #{p} from the following sizes"
-# 		puts size
-# 		size_sel = gets.chomp
-# 		puts " "
-# 	end	
-# 		pizza_size.push (size_sel)
-# 		puts " "
-
-# #Select the crust for each pizza
-# 	crust_sel = 0
-# 	until crust.include? crust_sel do 
-# 		puts "Pick the crust for Pizza #{p} from the following types"
-# 		puts crust
-# 		crust_sel = gets.chomp
-# 		puts " "
-# 	end	
-# 		crust_type.push (crust_sel)
-# 		puts " "
-
-# #Select the meat for each pizza
-# 	meats_sel = 0
-# 	until meats.include? meats_sel do 
-# 		puts "Pick the meat for Pizza #{p} from the following types"
-# 		puts meats
-# 		meats_sel = gets.chomp
-# 		puts " "
-# 	end	
-# 		meat_selection.push (meats_sel)
-# 		puts " "
-
-# #Select the veggies for each pizza
-# 	veggie_sel = 0
-# 	until veggies.include? veggie_sel do 
-# 		puts "Pick the veggie for Pizza #{p} from the following types"
-# 		puts veggies
-# 		veggie_sel = gets.chomp
-# 		puts " "
-# 	end	
-# 		veggies_selection.push (veggie_sel)
-# 		puts " "
-
-# #Select the sauce for each pizza
-# 	sauce_sel = 0
-# 	until special_sauce.include? sauce_sel do 
-# 		puts "Pick the sauce for Pizza #{p} from the following types"
-# 		puts special_sauce
-# 		sauce_sel = gets.chomp
-# 		puts " "
-# 	end	
-# 		sauce_selection.push (sauce_sel)
-# 		puts " "
-# end
-
-# def show_pizzas(num_p, pizza_size, crust_type, meat_selection, veggies_selection, sauce_selection)
-# 	for c in 1..num_p
-# 		puts "Pizza #{c}" 
-# 		puts pizza_size[c-1]
-# 		puts crust_type[c-1]
-# 		puts meat_selection[c-1]
-# 		puts veggies_selection[c-1]
-# 		puts sauce_selection[c-1]
-# 		puts " "
-# 	end
-# end
-
-# show_pizzas(num_p, pizza_size, crust_type, meat_selection, veggies_selection, sauce_selection)
+show_pizzas(num_p, pizza_size, crust_type, meat_selection, veggies_selection, sauce_selection)
 
 
 # owe = owe_calc(pizza_size)
