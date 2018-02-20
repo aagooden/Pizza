@@ -22,14 +22,16 @@ end
 
 def show_order(order)
 	for x in (1..order.length)
-		if order[0] == "Pizza" || order[0] == "Sub" || order[0] == "Drink"
-			print "#{order[x][0]} - $" 
-			print "#{order[x][2]}"
+		if order[x][0] == "Pizza" || order[0] == "Sub" || order[0] == "Drink"
+			print "#{order[x][1]} #{order[x][0]} - " 
+			print "$#{order[x][2]}"
+			print "\n"
 		else
 			print "#{order[x][1]} - $"
 			print "#{order[x][2]}"
 			print "\n"
 		end
+	end
 end
 
 
