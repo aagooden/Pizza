@@ -4,13 +4,14 @@ def database
 	{
 		order_items: [["Pizza", 0], ["Sub", 0], ["Side", 0], ["Drink", 0], ["Dessert", 0]],
 		piz_crusts: [["Thick", 0], ["Thin", 0], ["Regular", 0], ["Stuffed", 2]],
-		piz_meat: [["Pepperoni", 0], ["Sausage", 0], ["Ham", 0], ["Chicken", 0], ["None", 0]],
-		piz_veggies: [["Peppers", 0], ["Onions", 0], ["Mushrooms", 0], ["Olives", 0], ["None", 0]],
+		piz_meat: [["Pepperoni", 2], ["Sausage", 2], ["Ham", 2], ["Chicken", 2], ["None", 0]],
+		piz_veggies: [["Peppers", 1], ["Onions", 1], ["Mushrooms", 1], ["Olives", 1], ["None", 1]],
 		piz_sauces: [["Tomato", 0], ["Alfredo", 0], ["Spicy", 0], ["None", 0]],
-		piz_special_tops: [["Anchovies", 0], ["Pineapple", 0], ["Bacon", 0], ["Extra Cheese"], ["None", 0]],
+		piz_special_tops: [["Anchovies", 1], ["Pineapple", 1], ["Bacon", 1], ["Extra Cheese", 1], ["None", 0]],
 		piz_sizes: [["Small", 10], ["Medium", 12], ["Large", 15], ["Extra Large", 18]],
 		sub_breads: [["White", 0], ["Whole Wheat", 0], ["Itallian", 0], ["Herb", 0]],
 		sub_sizes: [["6 Inch", 6], ["Foot Long", 10], ["Good Grief", 15]],
+		sub_types: [["Chicken", 0], ["Meatball", 0], ["Itallian", 0], ["Dagwood", 0]],
 		drink_sizes: [["Small", 2.5], ["Medium", 3], ["Large", 4], ["Extra Large", 6]],
 		drink_types: [["Coke", 0], ["Diet Coke", 0], ["Sprite", 0], ["Dr. Pepper", 0]],
 		side_types: [["Fries", 4], ["Onion Rings", 6], ["Potato Chips", 3]],
@@ -21,6 +22,10 @@ end
 
 def show_order(order)
 	for x in (1..order.length)
+		if order[0] == "Pizza" || order[0] == "Sub" || order[0] == "Drink"
+			print "#{order[x][0]} - $" 
+			print "#{order[x][2]}"
+		else
 			print "#{order[x][1]} - $"
 			print "#{order[x][2]}"
 			print "\n"
@@ -116,13 +121,58 @@ def sides_order(order, database, item_count)
 	item_count += 1
 	order[item_count] = database[:side_types][selection - 1]
 	order[item_count].unshift('Side')
-	
-	
+	return [order, item_count]
+end
+
+
+def drink_order(order, database, item_count)
+	item_count += 1
+	order[item_count] = []
+drinks = database[:drink_types]
+sizes = database[:drink_sizes]
+
+drink_value = [sizes, drinks]
+value_name = ["Kind", "Drink Size"]
+
+	for count in (0...drink_value.length)
+
+		system "clear"
+		system "cls"
+		selection = 0
+
+		puts "Select your drink #{value_name[count]} from the following:"
+		puts ""
+		for x in (0...drink_value[count].length)
+
+			puts "#{x+1} - #{drink_value[count][x][0]}" 
+			#" $#{piz_value[count][1]}"
+		end
+
+			until selection.between?(1, drink_value[count].length)
+				puts "Enter the number that is next to your selection"
+				selection = gets.chomp
+				selection = selection.to_i 
+			end	
+
+			if drink_value[count] == sizes 
+				order[item_count].push(drink_value[count][selection - 1][0])
+				order[item_count].push(drink_value[count][selection - 1][1])
+			else
+				order[item_count].push(drink_value[count][selection - 1][0])
+			end
+
+		end
+	system "clear"
+	system "cls"
+
+	order[item_count].unshift('Drink')
 
 	return [order, item_count]
 end
 
+
 def calculate_owe(order, owe)
+
 
 	for x in (1...(order.length + 1))
 		owe = owe + order[x][2]
@@ -130,7 +180,14 @@ def calculate_owe(order, owe)
 	return owe 
 end
 
-
+def check_input
+	check = "nil"
+	until check == "yes" || check == "no"
+	check = gets.chomp
+	puts "Input yes or no"
+	end
+	return check
+end
 
 def pizza_ordering(database, item_count, order)
 	item_count += 1
@@ -170,14 +227,148 @@ value_name = ["Pizza Size", "Pizza Crust", "Pizza Sauce", "Pizza Meat", "Pizza V
 			else
 				order[item_count].push(piz_value[count][selection - 1][0])
 			end
-	end
 
+#add extra meats	
+			if piz_value[count][selection - 1][0] == "None"
+			elsif piz_value[count] == meats 
+				meat_selection = 0
+				loop do 
+					puts "Do you want more meat on your pizza? (yes or no)"
+					puts "Each additional meat selection is $2.00."
+					check = check_input()
+				break if check == "no"
+					
+
+					for x in (0...meats.length - 1)
+						puts "#{x+1} - #{meats[x][0]}"
+					end
+
+					until meat_selection.between?(1, meats.length)
+						puts "Enter the number that is next to your selection"
+						meat_selection = gets.chomp
+						meat_selection = meat_selection.to_i 
+					end
+
+					order[item_count].push(meats[meat_selection - 1][0])
+					puts ""
+				
+					order[item_count][1] = order[item_count][1] + piz_value[count][meat_selection - 1][1]
+				
+				end
+			end
+
+#add extra veggies
+			if piz_value[count][selection - 1][0] == "None"
+			elsif piz_value[count] == veggies 
+				veggie_selection = 0
+				loop do 
+					puts "Do you want more veggies on your pizza? (yes or no)"
+					puts "Each additional veggie selection is $1.00."
+					check = check_input()
+				break if check == "no"
+					
+
+					for x in (0... veggies.length - 1)
+						puts "#{x+1} - #{veggies[x][0]}"
+					end
+
+					until veggie_selection.between?(1, veggies.length)
+						puts "Enter the number that is next to your selection"
+						veggie_selection = gets.chomp
+						veggie_selection = veggie_selection.to_i 
+					end
+
+					order[item_count].push(veggies[veggie_selection - 1][0])
+					puts ""
+				
+					order[item_count][1] = order[item_count][1] + piz_value[count][veggie_selection - 1][1]
+				
+				end
+			end
+
+#add extra specials
+			if piz_value[count][selection - 1][0] == "None"
+			elsif piz_value[count] == special_tops 
+				special_selection = 0
+				loop do 
+					puts "Do you want more extra toppings on your pizza? (yes or no)"
+					puts "Each additional extra topping is $1.00."
+					check = check_input()
+				break if check == "no"
+					
+
+					for x in (0... special_tops.length - 1)
+						puts "#{x+1} - #{special_tops[x][0]}"
+					end
+
+					until special_selection.between?(1, special_tops.length)
+						puts "Enter the number that is next to your selection"
+						special_selection = gets.chomp
+						special_selection = special_selection.to_i 
+					end
+
+					order[item_count].push(special_tops[special_selection - 1][0])
+					puts ""
+				
+					order[item_count][1] = order[item_count][1] + piz_value[count][special_selection - 1][1]
+				
+				end
+			end
+	end
+	system "clear"
+	system "cls"
 
 	order[item_count].unshift('Pizza')
-	puts order 
 
 	return [order, item_count]
-	puts order 
+end
+
+
+def sub_ordering(order, database, item_count)
+	item_count += 1
+	order[item_count] = []
+sizes = database[:sub_sizes]
+breads = database[:sub_breads]
+types = database[:sub_types]
+special_tops = database[:piz_special_tops]
+sub_value = [sizes, breads, types]
+value_name = ["Sub Size", "Sub Bread", "Sub Type"]
+
+	for count in (0...sub_value.length)
+
+		system "clear"
+		system "cls"
+		selection = 0
+
+		puts "Select your #{value_name[count]} from the following:"
+		puts ""
+		for x in (0...sub_value[count].length)
+
+			puts "#{x+1} - #{sub_value[count][x][0]}" 
+			#" $#{piz_value[count][1]}"
+		end
+
+			until selection.between?(1, sub_value[count].length)
+				puts "Enter the number that is next to your selection"
+				selection = gets.chomp
+				selection = selection.to_i 
+			end	
+
+			if sub_value[count] == sizes 
+				order[item_count].push(sub_value[count][selection - 1][0])
+				order[item_count].push(sub_value[count][selection - 1][1])
+			else
+				order[item_count].push(sub_value[count][selection - 1][0])
+			end
+
+	end
+
+	system "clear"
+	system "cls"
+
+	order[item_count].unshift('Pizza')
+
+	return [order, item_count]
 end
 
 
@@ -198,117 +389,23 @@ while continue == "yes"
 		order, item_count = dessert_order(order, database, item_count)
 	elsif category == 1
 		order, item_count = pizza_ordering(database, item_count, order)
+	elsif category == 2
+		order, item_count = sub_ordering(order, database, item_count)
 	elsif category == 3
 		order, item_count = sides_order(order, database, item_count)	
+	elsif category == 4
+		order, item_count = drink_order(order, database, item_count)
 	end
 	continue = add_item(order)
 end
 
-# for x in (0...[order].length)
-# 	puts "#{x+1} - #{:order[x]}"
-# 	end
 owe = calculate_owe(order, owe)
 puts "Your final order is"
 puts ""
 show_order(order)
+tax = owe * 0.06
 puts ""
-puts "You owe #{owe}"
+puts "Your tax is $#{tax}"
+puts "You owe $#{owe + tax }"
 puts "Have a nice day!"
 
-puts order 
-
-
-
-
-
-# pizza_size = []
-# crust_type = []
-# meat_selection = []
-# veggies_selection = []
-# sauce_selection = []
-# topping_selction = []
-
-
-# 	size_sel = 0
-# 	until size.include? size_sel do 
-# 		puts "Pick the size for Pizza #{p} from the following sizes"
-# 		puts size
-# 		size_sel = gets.chomp
-# 		puts " "
-# 	end	
-# 		pizza_size.push (size_sel)
-# 		puts " "
-
-# #Select the crust for each pizza
-# 	crust_sel = 0
-# 	until crust.include? crust_sel do 
-# 		puts "Pick the crust for Pizza #{p} from the following types"
-# 		puts crust
-# 		crust_sel = gets.chomp
-# 		puts " "
-# 	end	
-# 		crust_type.push (crust_sel)
-# 		puts " "
-
-# #Select the meat for each pizza
-# 	meats_sel = 0
-# 	until meats.include? meats_sel do 
-# 		puts "Pick the meat for Pizza #{p} from the following types"
-# 		puts meats
-# 		meats_sel = gets.chomp
-# 		puts " "
-# 	end	
-# 		meat_selection.push (meats_sel)
-# 		puts " "
-
-# #Select the veggies for each pizza
-# 	veggie_sel = 0
-# 	until veggies.include? veggie_sel do 
-# 		puts "Pick the veggie for Pizza #{p} from the following types"
-# 		puts veggies
-# 		veggie_sel = gets.chomp
-# 		puts " "
-# 	end	
-# 		veggies_selection.push (veggie_sel)
-# 		puts " "
-
-# #Select the sauce for each pizza
-# 	sauce_sel = 0
-# 	until special_sauce.include? sauce_sel do 
-# 		puts "Pick the sauce for Pizza #{p} from the following types"
-# 		puts special_sauce
-# 		sauce_sel = gets.chomp
-# 		puts " "
-# 	end	
-# 		sauce_selection.push (sauce_sel)
-# 		puts " "
-# end
-
-# def show_pizzas(num_p, pizza_size, crust_type, meat_selection, veggies_selection, sauce_selection)
-# 	for c in 1..num_p
-# 		puts "Pizza #{c}" 
-# 		puts pizza_size[c-1]
-# 		puts crust_type[c-1]
-# 		puts meat_selection[c-1]
-# 		puts veggies_selection[c-1]
-# 		puts sauce_selection[c-1]
-# 		puts " "
-# 	end
-# end
-
-#show_pizzas(num_p, pizza_size, crust_type, meat_selection, veggies_selection, sauce_selection)
-
-
-# owe = owe_calc(pizza_size)
-# owe = owe.to_f
-# delivery = num_p * 2
-# delivery = delivery.to_f
-# tax = (owe + delivery) * 0.06
-# tax = tax.to_f
-
-
-# puts "Pizza Charge = $#{sprintf("%.02f", owe)}"
-# puts "Delivery = $#{sprintf("%.02f", delivery)}"
-# puts "Tax = $#{sprintf("%.02f", tax)}"
-# puts " "
-# puts "Your Total is $#{(sprintf("%.02f",(owe + delivery + tax)))}"
