@@ -1,8 +1,4 @@
 
-
-
-
-
 def crust()
 	["Thick", "Thin", "Pan", "Stuffed"]
 end
