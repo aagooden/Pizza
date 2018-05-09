@@ -11,7 +11,7 @@ Enter in terminal...
 $ git clone https://github.com/aagooden/Pizza
 ```
 ### To Start The App:
-Enter in terminal
+Enter in terminal in directory where app was cloned
 ```sh
 $ pizza3.rb
 ```
