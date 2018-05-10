@@ -1,6 +1,6 @@
 # Pizza
 
-Pizza is a basic app used to order multiple pizzas, subs, desserts, etc with assorted options.
+Pizza is a basic terminal app used to order multiple pizzas, subs, desserts, etc with assorted options.
 
 ### Features:
 Create custom orders with made-to-order pizzas and subs.
